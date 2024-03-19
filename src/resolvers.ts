@@ -1,36 +1,48 @@
 import { graphql, GraphQLSchema, GraphQLObjectType, GraphQLString, buildSchema } from "graphql";
+import typeDef from './schema.graphql';
 
 /*
 ** 직접 GraphQL의 type schema를 생성
 */
+// Schema < Queries
 // Construct a schema, using GraphQL schema language
+// Query: top-level type
+
+const schemaTypeDef = [typeDef];
 const schema = buildSchema(`
+    type Character {
+        name: String
+        age: Int
+    }
+
     type Query {
-        hello: String
+        getCharacter: Character
     }`
 );
 
-// Resolver
+// Resolvers
 // Provides a resolver function for each API endpoint
+// provides top level api end points
 const rootValue = {
     hello: () => {
-        return "Hello world!";
-    }
+        return "world";
+    },
+    getCharacter: () => {
+        return new Character();
+    },
 };
 
-(async () => {
-    const response = await graphql({
-        schema, // GraphQL Type
-        source: '{hello}', // Client Query
-        rootValue // Resolver
-    });
-    console.log(response);
-})();
+class Character {
+    name() {
+        return 'John';
+    }
 
+    age() {
+        return 25;
+    }
+}
 
-/*
-** 2
-*/
+// 2
 /*
 // Construct GraphQL schema
 const schema = new GraphQLSchema({
@@ -55,4 +67,4 @@ const source = '{hello}'; // Query From Client
     console.log(result)
 })(); */
 
-export {schema};
+export {schema, rootValue};

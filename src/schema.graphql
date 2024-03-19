@@ -1,0 +1,9 @@
+type Character {
+    name: String
+    age: Int
+}
+
+type Query {
+    hello: String
+    getCharacter: [Character]
+}
